@@ -1,0 +1,17 @@
+pub const SYSTEM_BUILTINS: &[&str] = &[
+    "lawa_pali",
+    "ma_ijo",
+    "toki_ijo",
+    "lape",
+    "tenpo_ni",
+    "suno_ni",
+    "nanpa_tenpo",
+    "tawa_kama",
+    "tawa_pana",
+    "nasin_alasa",
+    "nasin_sama",
+    "nasin_ante",
+    "kulupu_lukin",
+    "kulupu_pali",
+    "kulupu_pona",
+];

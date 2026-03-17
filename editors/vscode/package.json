@@ -1,0 +1,48 @@
+{
+  "name": "tkp-language",
+  "displayName": "TKP Language",
+  "description": "Syntax highlighting and LSP support for the TKP (Toki Pona) programming language",
+  "version": "0.1.0",
+  "publisher": "antigravity",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/tkp"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": ["Programming Languages"],
+  "keywords": ["tkp", "toki pona", "programming language"],
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onLanguage:tkp"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "tkp",
+        "aliases": ["TKP", "Toki Pona"],
+        "extensions": [".tkp"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "tkp",
+        "scopeName": "source.tkp",
+        "path": "./syntaxes/tkp.tmLanguage.json"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.75.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.0"
+  }
+}

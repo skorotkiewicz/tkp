@@ -1,0 +1,75 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "TKP",
+  "scopeName": "source.tkp",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#keywords" },
+    { "include": "#types" },
+    { "include": "#constants" },
+    { "include": "#builtins" },
+    { "include": "#functions" },
+    { "include": "#operators" }
+  ],
+  "repository": {
+    "comments": {
+      "match": "//.*$",
+      "name": "comment.line.double-slash.tkp"
+    },
+    "strings": {
+      "begin": "\"",
+      "end": "\"",
+      "name": "string.quoted.double.tkp",
+      "patterns": [
+        {
+          "match": "\\\\[nrt\\\\\"0]",
+          "name": "constant.character.escape.tkp"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "match": "\\b[0-9]+\\.[0-9]+\\b",
+          "name": "constant.numeric.float.tkp"
+        },
+        {
+          "match": "\\b[0-9]+\\b",
+          "name": "constant.numeric.integer.tkp"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "match": "\\b(pali|pana|ijo|awen|la|ante|sin|lon|pini|tawa|kulupu|lukin|alasa|jo|sama|insa|ken|nanpa)\\b",
+          "name": "keyword.control.tkp"
+        }
+      ]
+    },
+    "types": {
+      "match": "\\b(nanpa_kind|kipisi|sitelen|lawa|weka)\\b",
+      "name": "support.type.tkp"
+    },
+    "constants": {
+      "match": "\\b(kin|ala|weka)\\b",
+      "name": "constant.language.tkp"
+    },
+    "builtins": {
+      "match": "\\b(toki|kute|lili_nanpa|wawa_nanpa|suli_nanpa|nanpa_ante|kipisi_ante|suli_ijo|lipu_lukin|lipu_sitelen|lipu_sin|lipu_lon|sitelen_pali|toki_pakala)\\b",
+      "name": "support.function.tkp"
+    },
+    "functions": {
+      "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\()",
+      "captures": {
+        "1": { "name": "entity.name.function.tkp" }
+      }
+    },
+    "operators": {
+      "match": "(\\+|\\-|\\*|\\/|%|==|!=|<=|>=|<|>|&&|\\|\\||!|=>|->)",
+      "name": "keyword.operator.tkp"
+    }
+  }
+}

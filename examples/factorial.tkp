@@ -1,0 +1,9 @@
+// factorial.tkp - nanpa suli!
+pali factorial(n: nanpa_kind) -> nanpa_kind {
+    la n <= 1 {
+        pana 1
+    }
+    pana n * factorial(n - 1)
+}
+
+toki(factorial(10))

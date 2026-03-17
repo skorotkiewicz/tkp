@@ -1,0 +1,521 @@
+use crate::ast::StmtKind;
+use crate::lexer;
+use crate::parser;
+use std::collections::HashMap;
+use std::io::{BufRead, Write};
+
+const KEYWORDS: &[(&str, &str)] = &[
+    (
+        "pali",
+        "function definition — `pali name(params) -> Return type { ... }`",
+    ),
+    ("pana", "return value from function"),
+    ("ijo", "mutable variable declaration — `ijo name = value`"),
+    ("awen", "immutable constant — `awen name = value`"),
+    ("la", "if conditional — `la condition { ... } ante { ... }`"),
+    ("ante", "else branch"),
+    ("sin", "for loop — `sin ijo i = 0; i < n; i += 1 { ... }`"),
+    ("lon", "while loop — `lon condition { ... }`"),
+    ("pini", "break out of loop"),
+    ("tawa", "continue to next iteration"),
+    ("kin", "boolean true"),
+    ("ala", "boolean false"),
+    ("weka", "void / null value"),
+    ("toki", "print to stdout — `toki(value)`"),
+    ("kute", "read line from stdin — `kute()`"),
+    (
+        "kulupu",
+        "struct definition — `kulupu name { field: type }`",
+    ),
+    ("lukin", "try block — `lukin { ... } alasa(error) { ... }`"),
+    ("fail", "catch block"),
+    ("jo", "import module — `jo \"file.tkp\"`"),
+    ("sama", "pattern match — `sama value { pattern => result }`"),
+    ("ken", "impl block — `ken struct_name { pali }`"),
+    ("nanpa_kind", "64-bit integer type"),
+    ("kipisi", "64-bit float type"),
+    ("sitelen", "UTF-8 string type"),
+    ("lawa", "boolean type"),
+];
+
+const BUILTINS: &[(&str, &str)] = &[
+    ("lili_nanpa", "lili_nanpa(x) — square root of x"),
+    ("wawa_nanpa", "wawa_nanpa(x) — absolute value of x"),
+    ("suli_nanpa", "suli_nanpa(base, exponent) — base^exponent"),
+    ("nanpa_ante", "nanpa_ante(x) — convert to integer"),
+    ("kipisi_ante", "kipisi_ante(x) — convert to float"),
+    ("suli_ijo", "suli_ijo(s) — length of string"),
+    ("lipu_lukin", "lipu_lukin(path) — read file to string"),
+    (
+        "lipu_sitelen",
+        "lipu_sitelen(path, content) — write string to file",
+    ),
+    (
+        "lipu_sin",
+        "lipu_sin(path, content) — append string to file",
+    ),
+    ("lipu_lon", "lipu_lon(path) — returns bool if file exists"),
+    (
+        "sitelen_pali",
+        "sitelen_pali(\"template {0}\", value) — format string with positional or named args",
+    ),
+    ("toki_pakala", "toki_pakala(value) — print to stderr"),
+];
+
+fn keyword_docs() -> HashMap<String, String> {
+    let mut map = HashMap::new();
+    for (kw, doc) in KEYWORDS {
+        map.insert(kw.to_string(), doc.to_string());
+    }
+    for (bi, doc) in BUILTINS {
+        map.insert(bi.to_string(), doc.to_string());
+    }
+    map
+}
+
+fn read_message(reader: &mut impl BufRead) -> Option<String> {
+    let mut content_length: usize = 0;
+    let mut line = String::new();
+
+    loop {
+        line.clear();
+        reader.read_line(&mut line).ok()?;
+        let trimmed = line.trim();
+        if trimmed.is_empty() {
+            break;
+        }
+        if let Some(rest) = trimmed.strip_prefix("Content-Length: ") {
+            content_length = rest.parse().ok()?;
+        }
+    }
+
+    if content_length == 0 {
+        return None;
+    }
+
+    let mut buf = vec![0u8; content_length];
+    let mut total = 0;
+    while total < content_length {
+        let n = std::io::Read::read(reader, &mut buf[total..]).ok()?;
+        if n == 0 {
+            break;
+        }
+        total += n;
+    }
+    String::from_utf8(buf).ok()
+}
+
+fn send_response(writer: &mut impl Write, id: &serde_like::Value, result: serde_like::Value) {
+    let body = format!(
+        "{{\"jsonrpc\":\"2.0\",\"id\":{},\"result\":{}}}",
+        id, result
+    );
+    let _ = write!(writer, "Content-Length: {}\r\n\r\n{}", body.len(), body);
+    let _ = writer.flush();
+}
+
+mod serde_like {
+    use std::fmt;
+
+    #[derive(Clone)]
+    pub enum Value {
+        Null,
+        Bool(bool),
+        Int(i64),
+        Str(String),
+        Array(Vec<Value>),
+        Object(Vec<(String, Value)>),
+    }
+
+    impl fmt::Display for Value {
+        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            match self {
+                Value::Null => write!(f, "null"),
+                Value::Bool(b) => write!(f, "{}", b),
+                Value::Int(n) => write!(f, "{}", n),
+                Value::Str(s) => {
+                    let escaped = s
+                        .replace('\\', "\\\\")
+                        .replace('"', "\\\"")
+                        .replace('\n', "\\n");
+                    write!(f, "\"{}\"", escaped)
+                }
+                Value::Array(arr) => {
+                    let items: Vec<String> = arr.iter().map(|v| v.to_string()).collect();
+                    write!(f, "[{}]", items.join(","))
+                }
+                Value::Object(fields) => {
+                    let pairs: Vec<String> = fields
+                        .iter()
+                        .map(|(k, v)| format!("\"{}\":{}", k, v))
+                        .collect();
+                    write!(f, "{{{}}}", pairs.join(","))
+                }
+            }
+        }
+    }
+
+    pub fn parse_str(s: &str) -> Option<Value> {
+        let s = s.trim();
+        if s == "null" {
+            return Some(Value::Null);
+        }
+        if s == "true" {
+            return Some(Value::Bool(true));
+        }
+        if s == "false" {
+            return Some(Value::Bool(false));
+        }
+        if let Ok(n) = s.parse::<i64>() {
+            return Some(Value::Int(n));
+        }
+        if s.starts_with('"') && s.ends_with('"') {
+            return Some(Value::Str(s[1..s.len() - 1].to_string()));
+        }
+        None
+    }
+}
+
+fn parse_json_field<'a>(json: &'a str, field: &str) -> Option<&'a str> {
+    let key = format!("\"{}\"", field);
+    let pos = json.find(key.as_str())?;
+    let after = json[pos + key.len()..].trim_start();
+    let after = after.strip_prefix(':')?.trim_start();
+    if let Some(stripped) = after.strip_prefix('"') {
+        let end = stripped.find('"')? + 1;
+        Some(&after[1..end])
+    } else {
+        let end = after
+            .find(|c: char| ",}]".contains(c))
+            .unwrap_or(after.len());
+        Some(after[..end].trim())
+    }
+}
+
+pub fn run_server() -> Result<(), String> {
+    let stdin = std::io::stdin();
+    let stdout = std::io::stdout();
+    let mut reader = std::io::BufReader::new(stdin.lock());
+    let mut writer = std::io::BufWriter::new(stdout.lock());
+    let docs = keyword_docs();
+    let mut doc_symbols: Vec<SourceSymbol> = Vec::new();
+    let mut current_source = String::new();
+
+    loop {
+        let msg = match read_message(&mut reader) {
+            Some(m) => m,
+            None => break Ok(()),
+        };
+
+        let method = parse_json_field(&msg, "method").unwrap_or("").to_string();
+        let id_str = parse_json_field(&msg, "id").unwrap_or("null").to_string();
+        let id = serde_like::parse_str(&id_str).unwrap_or(serde_like::Value::Null);
+
+        match method.as_str() {
+            "initialize" => {
+                let result = serde_like::Value::Object(vec![
+                    (
+                        "capabilities".to_string(),
+                        serde_like::Value::Object(vec![
+                            ("hoverProvider".to_string(), serde_like::Value::Bool(true)),
+                            (
+                                "completionProvider".to_string(),
+                                serde_like::Value::Object(vec![(
+                                    "triggerCharacters".to_string(),
+                                    serde_like::Value::Array(vec![serde_like::Value::Str(
+                                        ".".to_string(),
+                                    )]),
+                                )]),
+                            ),
+                            ("textDocumentSync".to_string(), serde_like::Value::Int(1)),
+                        ]),
+                    ),
+                    (
+                        "serverInfo".to_string(),
+                        serde_like::Value::Object(vec![
+                            (
+                                "name".to_string(),
+                                serde_like::Value::Str("tkp-lsp".to_string()),
+                            ),
+                            (
+                                "version".to_string(),
+                                serde_like::Value::Str("0.1.0".to_string()),
+                            ),
+                        ]),
+                    ),
+                ]);
+                send_response(&mut writer, &id, result);
+            }
+
+            "textDocument/hover" => {
+                let word = extract_word_at_cursor(&msg);
+                let contents = if let Some(doc) = word.as_ref().and_then(|w| docs.get(w)) {
+                    serde_like::Value::Object(vec![
+                        (
+                            "kind".to_string(),
+                            serde_like::Value::Str("markdown".to_string()),
+                        ),
+                        (
+                            "value".to_string(),
+                            serde_like::Value::Str(format!(
+                                "**{}** — {}",
+                                word.as_deref().unwrap_or(""),
+                                doc
+                            )),
+                        ),
+                    ])
+                } else if let Some(sym) = word
+                    .as_ref()
+                    .and_then(|w| doc_symbols.iter().find(|s| &s.name == w))
+                {
+                    serde_like::Value::Object(vec![
+                        (
+                            "kind".to_string(),
+                            serde_like::Value::Str("markdown".to_string()),
+                        ),
+                        (
+                            "value".to_string(),
+                            serde_like::Value::Str(format!(
+                                "**{}** ({})\n\n`{}`",
+                                sym.name, sym.kind, sym.detail
+                            )),
+                        ),
+                    ])
+                } else {
+                    serde_like::Value::Null
+                };
+                let result = if matches!(contents, serde_like::Value::Null) {
+                    serde_like::Value::Null
+                } else {
+                    serde_like::Value::Object(vec![("contents".to_string(), contents)])
+                };
+                send_response(&mut writer, &id, result);
+            }
+
+            "textDocument/completion" => {
+                let mut items: Vec<serde_like::Value> = KEYWORDS
+                    .iter()
+                    .chain(BUILTINS.iter())
+                    .map(|(kw, doc)| {
+                        serde_like::Value::Object(vec![
+                            ("label".to_string(), serde_like::Value::Str(kw.to_string())),
+                            (
+                                "detail".to_string(),
+                                serde_like::Value::Str(doc.to_string()),
+                            ),
+                            ("kind".to_string(), serde_like::Value::Int(14)),
+                        ])
+                    })
+                    .collect();
+
+                for sym in &doc_symbols {
+                    let kind = match sym.kind {
+                        "function" => 3,
+                        "variable" => 6,
+                        "struct" => 22,
+                        "enum" => 13,
+                        "enum_variant" => 20,
+                        "field" => 5,
+                        _ => 1,
+                    };
+                    items.push(serde_like::Value::Object(vec![
+                        (
+                            "label".to_string(),
+                            serde_like::Value::Str(sym.name.clone()),
+                        ),
+                        (
+                            "detail".to_string(),
+                            serde_like::Value::Str(sym.detail.clone()),
+                        ),
+                        ("kind".to_string(), serde_like::Value::Int(kind)),
+                    ]));
+                }
+
+                send_response(&mut writer, &id, serde_like::Value::Array(items));
+            }
+
+            "textDocument/didOpen" | "textDocument/didChange" => {
+                if let Some(text) = parse_json_field(&msg, "text") {
+                    current_source = text.to_string();
+                    doc_symbols = extract_symbols(&current_source);
+                }
+            }
+
+            "textDocument/diagnostic" | "textDocument/publishDiagnostics" => {
+                let mut diags = Vec::new();
+                let tokens = lexer::tokenize(&current_source);
+                if let Err(e) = parser::parse(tokens) {
+                    diags.push(serde_like::Value::Object(vec![
+                        (
+                            "range".to_string(),
+                            serde_like::Value::Object(vec![
+                                (
+                                    "start".to_string(),
+                                    serde_like::Value::Object(vec![
+                                        (
+                                            "line".to_string(),
+                                            serde_like::Value::Int(e.line.saturating_sub(1) as i64),
+                                        ),
+                                        ("character".to_string(), serde_like::Value::Int(0)),
+                                    ]),
+                                ),
+                                (
+                                    "end".to_string(),
+                                    serde_like::Value::Object(vec![
+                                        (
+                                            "line".to_string(),
+                                            serde_like::Value::Int(e.line.saturating_sub(1) as i64),
+                                        ),
+                                        ("character".to_string(), serde_like::Value::Int(100)),
+                                    ]),
+                                ),
+                            ]),
+                        ),
+                        ("severity".to_string(), serde_like::Value::Int(1)),
+                        ("message".to_string(), serde_like::Value::Str(e.message)),
+                    ]));
+                }
+                let result = serde_like::Value::Object(vec![
+                    (
+                        "kind".to_string(),
+                        serde_like::Value::Str("full".to_string()),
+                    ),
+                    ("items".to_string(), serde_like::Value::Array(diags)),
+                ]);
+                send_response(&mut writer, &id, result);
+            }
+
+            "shutdown" => {
+                send_response(&mut writer, &id, serde_like::Value::Null);
+            }
+            "exit" => break Ok(()),
+            _ => {
+                if !method.is_empty()
+                    && !method.starts_with("$/")
+                    && !method.contains("notification")
+                {
+                    let result = serde_like::Value::Null;
+                    send_response(&mut writer, &id, result);
+                }
+            }
+        }
+    }
+}
+
+fn extract_word_at_cursor(msg: &str) -> Option<String> {
+    let text = parse_json_field(msg, "textDocument").or_else(|| parse_json_field(msg, "text"))?;
+    let line_num: usize = parse_json_field(msg, "line")?.parse().ok()?;
+    let char_num: usize = parse_json_field(msg, "character")?.parse().ok()?;
+
+    let line = text.lines().nth(line_num)?;
+    let chars: Vec<char> = line.chars().collect();
+    if char_num >= chars.len() {
+        return None;
+    }
+    let mut start = char_num;
+    while start > 0 && (chars[start - 1].is_alphanumeric() || is_tokipona(chars[start - 1])) {
+        start -= 1;
+    }
+    let mut end = char_num;
+    while end < chars.len() && (chars[end].is_alphanumeric() || is_tokipona(chars[end])) {
+        end += 1;
+    }
+    if start == end {
+        return None;
+    }
+    Some(chars[start..end].iter().collect())
+}
+
+struct SourceSymbol {
+    name: String,
+    kind: &'static str,
+    detail: String,
+}
+
+fn extract_symbols(source: &str) -> Vec<SourceSymbol> {
+    let mut symbols = Vec::new();
+    let tokens = lexer::tokenize(source);
+    let program = match parser::parse(tokens) {
+        Ok(p) => p,
+        Err(_) => return symbols,
+    };
+
+    for stmt in &program.stmts {
+        match &stmt.kind {
+            StmtKind::FuncDef {
+                name,
+                params,
+                return_type,
+                ..
+            } => {
+                let params_str: Vec<String> = params
+                    .iter()
+                    .map(|(n, t)| format!("{}: {:?}", n, t))
+                    .collect();
+                let ret = return_type
+                    .as_ref()
+                    .map(|t| format!(" -> {:?}", t))
+                    .unwrap_or_default();
+                symbols.push(SourceSymbol {
+                    name: name.clone(),
+                    kind: "function",
+                    detail: format!("pali {}({}){}", name, params_str.join(", "), ret),
+                });
+            }
+            StmtKind::VarDecl {
+                name, ty, mutable, ..
+            } => {
+                let prefix = if *mutable { "ijo" } else { "awen" };
+                let ty_str = ty
+                    .as_ref()
+                    .map(|t| format!(": {:?}", t))
+                    .unwrap_or_default();
+                symbols.push(SourceSymbol {
+                    name: name.clone(),
+                    kind: "variable",
+                    detail: format!("{} {}{}", prefix, name, ty_str),
+                });
+            }
+            StmtKind::StructDef { name, fields } => {
+                let fields_str: Vec<String> = fields
+                    .iter()
+                    .map(|(n, t)| format!("{}: {:?}", n, t))
+                    .collect();
+                symbols.push(SourceSymbol {
+                    name: name.clone(),
+                    kind: "struct",
+                    detail: format!("kulupu {} {{ {} }}", name, fields_str.join(", ")),
+                });
+                for (fname, ftype) in fields {
+                    symbols.push(SourceSymbol {
+                        name: fname.clone(),
+                        kind: "field",
+                        detail: format!("{}.{}: {:?}", name, fname, ftype),
+                    });
+                }
+            }
+            StmtKind::EnumDef { name, variants } => {
+                symbols.push(SourceSymbol {
+                    name: name.clone(),
+                    kind: "enum",
+                    detail: format!("nanpa_ante {} {{ {} }}", name, variants.join(", ")),
+                });
+                for v in variants {
+                    symbols.push(SourceSymbol {
+                        name: format!("{}::{}", name, v),
+                        kind: "enum_variant",
+                        detail: format!("{}::{}", name, v),
+                    });
+                }
+            }
+            _ => {}
+        }
+    }
+    symbols
+}
+
+fn is_tokipona(c: char) -> bool {
+    ('\u{AC00}'..='\u{D7A3}').contains(&c)
+        || ('\u{1100}'..='\u{11FF}').contains(&c)
+        || ('\u{3130}'..='\u{318F}').contains(&c)
+}

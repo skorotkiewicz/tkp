@@ -1,0 +1,8 @@
+// even_odd.tkp - nanpa tu
+sin ijo i = 1; i <= 10; i += 1 {
+    la i % 2 == 0 {
+        toki("even")
+    } ante {
+        toki("odd")
+    }
+}

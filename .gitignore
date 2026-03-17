@@ -1,0 +1,11 @@
+/target
+/dist
+/node_modules
+/out
+.DS_Store
+*.ll
+*.o
+*.vsix
+
+/docs/book
+/web

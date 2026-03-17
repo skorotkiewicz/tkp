@@ -1,0 +1,9 @@
+// fibonacci.tkp - nanpa Fibonacci
+pali fibonacci(n: nanpa_kind) -> nanpa_kind {
+    la n <= 1 {
+        pana n
+    }
+    pana fibonacci(n - 1) + fibonacci(n - 2)
+}
+
+toki(fibonacci(10))

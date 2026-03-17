@@ -1,0 +1,6 @@
+// sum.tkp - kulupu nanpa
+ijo total = 0
+sin ijo i = 1; i <= 100; i += 1 {
+    total = total + i
+}
+toki(total)
