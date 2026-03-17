@@ -10,7 +10,7 @@ Tested with GPT-4o tokenizer (tiktoken), comparing the same Fibonacci program:
 | JavaScript | 69 |
 | TKP | 88 |
 
-## Why Korean Uses More Tokens
+## Why toki pona Uses More Tokens
 
 LLM tokenizers use BPE (Byte Pair Encoding):
 
@@ -35,10 +35,10 @@ Since training data is predominantly English:
 | `lon` | 1 | `while` | 1 |
 | `kin` | 1 | `true` | 1 |
 
-## This Is a Tokenizer Problem, Not a Korean Problem
+## This Is a Tokenizer Problem, Not a toki pona Problem
 
-If BPE were trained on a Korean-heavy corpus, `pali` could be a single token. The inefficiency comes from training data distribution, not from the script itself.
+If BPE were trained on a toki pona-heavy corpus, `pali` could be a single token. The inefficiency comes from training data distribution, not from the script itself.
 
 Relevant work:
 - Ukrainian LLM "Lapa" replaced 80K tokens and achieved 1.5x efficiency for Ukrainian text
-- Custom BPE training on Korean programming text could close the gap
+- Custom BPE training on toki pona programming text could close the gap

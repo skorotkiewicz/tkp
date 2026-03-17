@@ -1,6 +1,6 @@
 # TKP (tkp) Programming Language
 
-TKP is a statically-typed, compiled programming language where every keyword is written in Korean (TKPgul). It compiles to native binaries through LLVM IR and includes a tree-walking interpreter for instant execution.
+TKP is a statically-typed, compiled programming language where every keyword is written in toki pona. It compiles to native binaries through LLVM IR and includes a tree-walking interpreter for instant execution.
 
 ## Quick Example
 
@@ -16,7 +16,7 @@ Output: `toki a, ma o!`
 
 ## Key Features
 
-- **Korean keywords** — `pali`, `la`, `sin`, `ijo`
+- **toki pona keywords** — `pali`, `la`, `sin`, `ijo`
 - **Dual execution** — interpreter (`tkp interpret`) and compiler (`tkp build`)
 - **Arrays, structs, enums, tuples, closures, pattern matching**
 - **Error handling** — `lukin` / `alasa` (try/catch)
