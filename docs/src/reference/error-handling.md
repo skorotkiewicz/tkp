@@ -2,7 +2,7 @@
 
 ## Try / Catch
 
-```
+```tkp
 lukin {
     ijo content = lipu_lukin("missing_file.txt")
     toki(content)
@@ -23,7 +23,7 @@ The error variable (`error`) contains the error message as a string.
 
 ## Example: Safe Division
 
-```
+```tkp
 pali unsafe_div(a: nanpa_kind, b: nanpa_kind) -> nanpa_kind {
     lukin {
         pana a / b

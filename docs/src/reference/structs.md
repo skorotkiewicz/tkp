@@ -2,7 +2,7 @@
 
 ## Definition
 
-```
+```tkp
 kulupu person {
     name: sitelen,
     age: nanpa_kind
@@ -11,26 +11,26 @@ kulupu person {
 
 ## Instantiation
 
-```
+```tkp
 ijo name_A = person { name: "name_A", age: 30 }
 ```
 
 ## Field Access
 
-```
+```tkp
 toki(name_A.name)    // name_A
 toki(name_A.age)    // 30
 ```
 
 ## Field Mutation
 
-```
+```tkp
 name_A.age = 31
 ```
 
 ## Nested Structs
 
-```
+```tkp
 kulupu addr { city: sitelen }
 kulupu staff { name: sitelen, addr: addr }
 
@@ -41,7 +41,7 @@ p.addr.city = "Busan"     // nested mutation
 
 ## Impl Blocks (Methods)
 
-```
+```tkp
 ken person {
     pali intro(self: person) {
         toki(sitelen_pali("{0}, {1}", self.name, self.age))

@@ -2,7 +2,7 @@
 
 Create a file called `hello.tkp`:
 
-```
+```tkp
 toki("toki a, ma o!")
 ```
 
@@ -19,7 +19,7 @@ toki a, ma o!
 
 ## With a Function
 
-```
+```tkp
 pali main() {
     toki("Hello from TKP!")
 }

@@ -14,7 +14,7 @@
 
 ## String Indexing
 
-```
+```tkp
 ijo s = "tkptext"
 toki(s[0])    // tkp
 toki(s[1])    // text
@@ -22,7 +22,7 @@ toki(s[1])    // text
 
 ## String Iteration
 
-```
+```tkp
 sin text insa "tkptext" {
     toki(text)
 }
@@ -30,7 +30,7 @@ sin text insa "tkptext" {
 
 ## Concatenation
 
-```
+```tkp
 ijo full = "toki" + "hello"
 toki(full)    // toki
 ```

@@ -2,7 +2,7 @@
 
 ## Creating a Map
 
-```
+```tkp
 ijo score = dictionary("math", 95, "eng", 88, "sci", 92)
 ijo empty_map = dictionary()
 ```
@@ -11,7 +11,7 @@ Arguments are key-value pairs: `dictionary(key1, val1, key2, val2, ...)`.
 
 ## Access and Mutation
 
-```
+```tkp
 toki(score["math"])       // 95
 score["lang"] = 100       // add new key
 score["math"] = 99        // update existing
@@ -29,7 +29,7 @@ score["math"] = 99        // update existing
 
 ## Iteration
 
-```
+```tkp
 ijo keys = score.keys()
 sin key insa keys {
     toki(sitelen_pali("{0}: {1}", key, score[key]))

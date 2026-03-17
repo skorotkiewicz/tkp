@@ -4,14 +4,14 @@ Powered by Rust's `reqwest` crate (blocking mode).
 
 ## GET Request
 
-```
+```tkp
 ijo resp = lipu_lukin_http("https://httpbin.org/get")
 toki(resp)
 ```
 
 ## POST Request
 
-```
+```tkp
 ijo body = kulupu_pali(dictionary("name", "name_A"))
 ijo resp = tawa_pana("https://httpbin.org/post", body)
 toki(resp)
@@ -21,7 +21,7 @@ POST sends with `Content-Type: application/json`. If the body is not a string, i
 
 ## Error TKPdling
 
-```
+```tkp
 lukin {
     ijo resp = lipu_lukin_http("https://invalid-url.example")
 } alasa(error) {

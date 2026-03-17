@@ -2,7 +2,7 @@
 
 ## Basic Match
 
-```
+```tkp
 sama value {
     1 => toki("one")
     2 => toki("two")
@@ -12,7 +12,7 @@ sama value {
 
 ## With Blocks
 
-```
+```tkp
 sama status {
     "active" => {
         toki("active status")
@@ -36,7 +36,7 @@ sama status {
 
 ## Variable Binding
 
-```
+```tkp
 sama value {
     0 => toki("zero")
     n => toki(sitelen_pali("value: {0}", n))

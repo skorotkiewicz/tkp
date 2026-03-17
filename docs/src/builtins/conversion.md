@@ -8,7 +8,7 @@
 
 ## Conversion Rules
 
-```
+```tkp
 nanpa_ante(3.14)      // 3 (truncates)
 nanpa_ante("42")      // 42 (parse string)
 nanpa_ante(kin)        // 1

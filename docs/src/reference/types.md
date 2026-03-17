@@ -14,7 +14,7 @@
 
 Int and Float mix automatically:
 
-```
+```tkp
 toki(1 + 1.5)     // 2.5 (Float)
 toki(3 * 2.0)     // 6.0 (Float)
 toki(10 - 0.5)    // 9.5 (Float)

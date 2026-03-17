@@ -2,14 +2,14 @@
 
 ## Creating Tuples
 
-```
+```tkp
 ijo coord = (10, 20)
 ijo person = ("name_A", 30, kin)
 ```
 
 ## Access by Index
 
-```
+```tkp
 toki(coord.0)    // 10
 toki(coord.1)    // 20
 toki(person.0)    // name_A
@@ -17,7 +17,7 @@ toki(person.0)    // name_A
 
 ## As Return Type
 
-```
+```tkp
 pali minmax(arr: [nanpa_kind]) -> (nanpa_kind, nanpa_kind) {
     ijo min = arr[0]
     ijo max = arr[0]

@@ -9,7 +9,7 @@
 
 ## Example: Read and Process
 
-```
+```tkp
 lukin {
     ijo content = lipu_lukin("data.txt")
     ijo lines = content.split("\n")

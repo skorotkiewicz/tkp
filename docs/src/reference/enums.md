@@ -2,7 +2,7 @@
 
 ## Definition
 
-```
+```tkp
 nanpa direction {
     up,
     down,
@@ -15,7 +15,7 @@ nanpa direction {
 
 Variants are accessed with `::`:
 
-```
+```tkp
 toki(direction::up)       // 0
 toki(direction::down)     // 1
 toki(direction::right)   // 3
@@ -25,7 +25,7 @@ Variants are integer values starting from 0.
 
 ## Pattern Matching with Enums
 
-```
+```tkp
 sama direction::down {
     0 => toki("up")
     1 => toki("down")

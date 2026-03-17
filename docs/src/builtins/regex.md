@@ -4,21 +4,21 @@ Powered by Rust's `regex` crate.
 
 ## Find All Matches
 
-```
+```tkp
 ijo result = nasin_alasa("[0-9]+", "abc 123 def 456")
 toki(result)    // [123, 456]
 ```
 
 ## Test Match
 
-```
+```tkp
 toki(nasin_sama("^[0-9]+$", "12345"))    // kin
 toki(nasin_sama("^[0-9]+$", "abc"))      // ala
 ```
 
 ## Replace
 
-```
+```tkp
 ijo result = nasin_ante("[0-9]+", "before: 010-1234-5678", "***")
 toki(result)    // before: ***-***-***
 ```

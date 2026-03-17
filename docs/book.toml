@@ -13,3 +13,5 @@ default-theme = "navy"
 preferred-dark-theme = "navy"
 git-repository-url = "https://github.com/skorotkiewicz/tkp"
 edit-url-template = "https://github.com/skorotkiewicz/tkp/edit/main/docs/{path}"
+additional-js = ["src/tkp-highlight.js"]
+

@@ -134,7 +134,7 @@ type(value)                 → type name → sitelen
 
 ## SYNTAX PATTERNS
 
-```
+```tkp
 // Variable declaration
 ijo name = value
 ijo name: type = value

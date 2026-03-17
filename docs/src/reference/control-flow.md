@@ -2,7 +2,7 @@
 
 ## If / Else-If / Else
 
-```
+```tkp
 la score >= 90 {
     toki("A")
 } ante la score >= 80 {
@@ -14,7 +14,7 @@ la score >= 90 {
 
 ## For Loop
 
-```
+```tkp
 sin ijo i = 0; i < 10; i += 1 {
     toki(i)
 }
@@ -23,21 +23,21 @@ sin ijo i = 0; i < 10; i += 1 {
 ## For-In Loop
 
 Iterate over arrays:
-```
+```tkp
 sin fruit insa ["apple", "pear", "grape"] {
     toki(fruit)
 }
 ```
 
 Iterate over strings:
-```
+```tkp
 sin text insa "tkptext" {
     toki(text)    // tkp, text
 }
 ```
 
 Iterate over ranges:
-```
+```tkp
 sin i insa 0..5 {
     toki(i)    // 0, 1, 2, 3, 4
 }
@@ -45,7 +45,7 @@ sin i insa 0..5 {
 
 ## While Loop
 
-```
+```tkp
 ijo n = 0
 lon n < 5 {
     toki(n)
@@ -55,7 +55,7 @@ lon n < 5 {
 
 ## Break and Continue
 
-```
+```tkp
 sin i insa 0..100 {
     la i == 50 { pini }
     la i % 2 == 0 { tawa }
@@ -65,7 +65,7 @@ sin i insa 0..100 {
 
 ## Range Operator
 
-```
+```tkp
 ijo range = 0..10     // creates [0, 1, 2, ..., 9]
 ijo suli_ijo = range.suli_ijo()  // 10
 ```

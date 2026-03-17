@@ -4,7 +4,7 @@ Powered by Rust's `chrono` crate.
 
 ## Current Time
 
-```
+```tkp
 toki(tenpo_ni())    // 2025-03-15 12:30:45
 toki(suno_ni())    // 2025-03-15
 toki(nanpa_tenpo())  // 1710500000 (Unix timestamp)

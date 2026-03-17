@@ -2,7 +2,7 @@
 
 ## Anonymous Functions
 
-```
+```tkp
 ijo double = pali(x: nanpa_kind) { pana x * 2 }
 toki(double(5))    // 10
 ```
@@ -11,7 +11,7 @@ toki(double(5))    // 10
 
 Closures capture variables from their enclosing scope:
 
-```
+```tkp
 ijo pearnum = 3
 ijo mul = pali(x: nanpa_kind) { pana x * pearnum }
 toki(mul(5))    // 15
@@ -19,7 +19,7 @@ toki(mul(5))    // 15
 
 ## Passing as Arguments
 
-```
+```tkp
 pali apply(f: pali, x: nanpa_kind) -> nanpa_kind {
     pana f(x)
 }

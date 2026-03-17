@@ -2,14 +2,14 @@
 
 ## Creating Arrays
 
-```
+```tkp
 ijo number = [1, 2, 3, 4, 5]
 ijo empty_arr = []
 ```
 
 ## Indexing
 
-```
+```tkp
 toki(number[0])     // 1
 toki(number[-1])    // 5 (negative indexing)
 number[0] = 99      // mutation
@@ -29,7 +29,7 @@ number[0] = 99      // mutation
 
 ## Iteration
 
-```
+```tkp
 sin item insa [1, 2, 3] {
     toki(item)
 }
