@@ -18,8 +18,8 @@ sudo apt install clang
 ## Install TKP
 
 ```bash
-git clone https://github.com/xodn348/han.git
-cd han
+git clone https://github.com/skorotkiewicz/tkp.git
+cd tkp
 cargo install --path .
 ```
 
