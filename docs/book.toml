@@ -1,5 +1,5 @@
 [book]
-authors = ["antigravity"]
+authors = ["skorotkiewicz"]
 language = "en"
 src = "src"
 title = "TKP (Toki Pona) Programming Language"
@@ -11,5 +11,5 @@ build-dir = "book"
 [output.html]
 default-theme = "navy"
 preferred-dark-theme = "navy"
-git-repository-url = "https://github.com/your-username/tkp"
-edit-url-template = "https://github.com/your-username/tkp/edit/main/docs/src/{path}"
+git-repository-url = "https://github.com/skorotkiewicz/tkp"
+edit-url-template = "https://github.com/skorotkiewicz/tkp/edit/main/docs/src/{path}"
