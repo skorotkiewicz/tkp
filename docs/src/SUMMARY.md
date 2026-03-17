@@ -7,7 +7,8 @@
 - [Installation](./getting-started/installation.md)
 - [Hello World](./getting-started/hello-world.md)
 - [REPL](./getting-started/repl.md)
-- [Learn Toki Pona Through Coding](./getting-started/learn-toki-pona.md)
+- [Learn](./getting-started/learn.md)
+<!-- - [Learn Toki Pona Through Coding](./getting-started/learn-toki-pona.md) -->
 
 # Language Reference
 
