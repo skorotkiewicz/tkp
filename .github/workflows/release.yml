@@ -39,9 +39,12 @@ jobs:
       - name: Install Rust
         run: rustup target add ${{ matrix.target }}
 
+      - name: Install libssl-dev
+        run: sudo apt-get install -y libssl-dev
+
       - name: Install musl tools (Linux amd64)
         if: matrix.target == 'x86_64-unknown-linux-musl'
-        run: sudo apt-get update && sudo apt-get install -y musl-tools libssl-dev
+        run: sudo apt-get update && sudo apt-get install -y musl-tools
 
       - name: Build
         run: cargo build --release --target ${{ matrix.target }}
