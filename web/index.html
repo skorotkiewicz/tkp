@@ -183,10 +183,10 @@
 
 <header>
   <h1>TKP <span style="color:#8b949e">Toki Pona</span></h1>
-  <span class="badge">v0.1.0</span>
+  <span class="badge">v0.1.1</span>
   <span class="tagline">Minimalist Programming Simplicity</span>
   <nav class="nav-links">
-    <a href="https://github.com/your-username/tkp">GitHub</a>
+    <a href="https://github.com/skorotkiewicz/tkp">GitHub</a>
     <a href="/docs/introduction.html">Docs</a>
   </nav>
 </header>
@@ -217,16 +217,16 @@
 </div>
 
 <script type="module">
-  import init, { run_tkp } from './tkp.js';
-  import { EditorView, keymap, lineNumbers, highlightActiveLine } from 'https://esm.sh/@codemirror/view@6';
-  import { EditorState } from 'https://esm.sh/@codemirror/state@6';
-  import { StreamLanguage, HighlightStyle, syntaxHighlighting } from 'https://esm.sh/@codemirror/language@6';
   import { defaultKeymap, indentWithTab } from 'https://esm.sh/@codemirror/commands@6';
+  import { HighlightStyle, StreamLanguage, syntaxHighlighting } from 'https://esm.sh/@codemirror/language@6';
+  import { EditorState } from 'https://esm.sh/@codemirror/state@6';
+  import { EditorView, highlightActiveLine, keymap, lineNumbers } from 'https://esm.sh/@codemirror/view@6';
   import { tags } from 'https://esm.sh/@lezer/highlight@1';
+  import init, { run_tkp } from './tkp.js';
 
   const KEYWORDS = ['pali','pana','ijo','awen','la','ante','sin','lon','pini','tawa','kulupu','lukin','alasa','sama','jo','ken','nanpa','insa'];
   const TYPES    = ['nanpa_kind','kipisi','sitelen','lawa','weka'];
-  const BUILTINS = ['toki','kute','lili_nanpa','wawa_nanpa','suli_nanpa','nanpa_ante','kipisi_ante','suli_ijo','lipu_lukin','lipu_sitelen','lipu_sin','lipu_lon','sitelen_pali','toki_pakala'];
+  const BUILTINS = ['toki','kute','lili_nanpa','wawa_nanpa','suli_nanpa','nanpa_ante','kipisi_ante','suli_ijo','lipu_lukin','lipu_sitelen','lipu_sin','lipu_lon','sitelen_pali','toki_pakala', 'nasin','lape','lawa_pali','toki_ijo','tenpo_ni','suno_ni','nanpa_tenpo','nasin_alasa','nasin_sama','nasin_ante','lipu_lukin_http','tawa_pana','kulupu_lukin','kulupu_pali','kulupu_pona'];
   const ATOMS    = ['kin','ala','weka'];
 
   const tkpLang = StreamLanguage.define({
@@ -303,8 +303,8 @@ toki(add(x, y))`,
 }
 
 ken jan {
-    pali toki_insa(self: jan) {
-        toki(sitelen_pali("nimi mi li {0}. tenpo mi li {1}.", self.nimi, self.tenpo))
+    pali toki_insa(mi: jan) {
+        toki(sitelen_pali("nimi mi li {0}. tenpo mi li {1}.", mi.nimi, mi.tenpo))
     }
 }
 
@@ -352,7 +352,7 @@ toki("ni li toki pona.")`;
     }
   }
 
-  window.runCode = function() {
+  window.runCode = () => {
     if (!wasmReady) return;
     const code = view.state.doc.toString();
     const out = document.getElementById('output');
@@ -370,7 +370,7 @@ toki("ni li toki pona.")`;
     }
   };
 
-  window.loadExample = function(name) {
+  window.loadExample = (name) => {
     view.dispatch({
       changes: { from: 0, to: view.state.doc.length, insert: EXAMPLES[name] }
     });

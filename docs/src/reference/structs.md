@@ -43,12 +43,12 @@ p.addr.city = "Busan"     // nested mutation
 
 ```tkp
 ken person {
-    pali intro(self: person) {
-        toki(sitelen_pali("{0}, {1}", self.name, self.age))
+    pali intro(mi: person) {
+        toki(sitelen_pali("{0}, {1}", mi.name, mi.age))
     }
 }
 
 name_A.intro()    // name_A, 30
 ```
 
-`self` is the self parameter — refers to the struct instance.
+`mi` is the self parameter — refers to the struct instance.

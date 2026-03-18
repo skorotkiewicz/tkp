@@ -12,7 +12,7 @@
 ```tkp
 lukin {
     ijo content = lipu_lukin("data.txt")
-    ijo lines = content.split("\n")
+    ijo lines = content.tu("\n")
     sin line insa lines {
         toki(line)
     }

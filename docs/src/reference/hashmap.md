@@ -3,11 +3,11 @@
 ## Creating a Map
 
 ```tkp
-ijo score = dictionary("math", 95, "eng", 88, "sci", 92)
-ijo empty_map = dictionary()
+ijo score = lipu("math", 95, "eng", 88, "sci", 92)
+ijo empty_map = lipu()
 ```
 
-Arguments are key-value pairs: `dictionary(key1, val1, key2, val2, ...)`.
+Arguments are key-value pairs: `lipu(key1, val1, key2, val2, ...)`.
 
 ## Access and Mutation
 
@@ -21,16 +21,16 @@ score["math"] = 99        // update existing
 
 | Method | Description | Example |
 |--------|-------------|---------|
-| `.keys()` | All keys as array | `score.keys()` → `["math", "eng", "sci"]` |
-| `.values()` | All values as array | `score.values()` → `[95, 88, 92]` |
+| `.nimi_ale()` | All keys as array | `score.nimi_ale()` → `["math", "eng", "sci"]` |
+| `.ijo_ale()` | All values as array | `score.ijo_ale()` → `[95, 88, 92]` |
 | `.suli_ijo()` | Number of entries | `score.suli_ijo()` → `3` |
-| `.contains(key)` | Key exists | `score.contains("math")` → `kin` |
-| `.remove(key)` | Remove key | `score.remove("eng")` |
+| `.jo(key)` | Key exists | `score.jo("math")` → `kin` |
+| `.pakala(key)` | Remove key | `score.pakala("eng")` |
 
 ## Iteration
 
 ```tkp
-ijo keys = score.keys()
+ijo keys = score.nimi_ale()
 sin key insa keys {
     toki(sitelen_pali("{0}: {1}", key, score[key]))
 }

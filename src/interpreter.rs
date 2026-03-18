@@ -8,6 +8,17 @@ thread_local! {
     static OUTPUT_BUFFER: RefCell<Option<String>> = const { RefCell::new(None) };
 }
 
+pub fn capture_start() {
+    OUTPUT_BUFFER.with(|b| {
+        *b.borrow_mut() = Some(String::new());
+    });
+}
+
+pub fn capture_flush() -> String {
+    OUTPUT_BUFFER.with(|b| b.borrow_mut().take().unwrap_or_default())
+}
+
+
 pub struct Interpreter {
     pub env: Environment,
 }
@@ -1154,18 +1165,19 @@ fn eval_builtin_stdlib(
             }
             let val = eval_expr(&args[0], env, line)?;
             let type_name = match val {
-                Value::Int(_) => "nanpa",
+                Value::Int(_) => "nanpa_kind",
                 Value::Float(_) => "kipisi",
                 Value::Str(_) => "sitelen",
                 Value::Bool(_) => "lawa",
                 Value::Void => "weka",
                 Value::Function { .. } => "pali",
                 Value::Closure { .. } => "pali_lili",
-                Value::Array(_) => "kulupu",
+                Value::Array(_) => "kulupu_kipisi",
                 Value::Tuple(_) => "wan",
                 Value::Map(_) => "lipu",
-                Value::Struct { .. } => "kulupu_ijo",
+                Value::Struct { .. } => "kulupu",
             };
+
             Ok(Some(Value::Str(type_name.to_string())))
         }
         _ => Ok(None),

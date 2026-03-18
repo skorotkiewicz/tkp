@@ -77,12 +77,12 @@ lipu_lukin(path)            → read file → sitelen
 lipu_sitelen(path, content)      → write file
 lipu_sin(path, content)      → append to file
 lipu_lon(path)            → file exists → lawa
-dictionary(key, value, ...)        → create HashMap → dictionary
+lipu(key, value, ...)        → create HashMap → lipu
 kulupu_lukin(sitelen)       → parse JSON → value
 kulupu_pali(value)           → value → JSON string
 kulupu_pona(value)         → value → pretty JSON string
-lipu_lukin_http(url)        → GET request → sitelen
-tawa_pana(url, body)    → POST request → sitelen
+tawa_kama(url)              → GET request → sitelen
+tawa_pana(url, body)        → POST request → sitelen
 nasin_alasa(pattern, text)  → find matches → [sitelen]
 nasin_sama(pattern, text)  → test match → lawa
 nasin_ante(pattern, text, rep) → replace → sitelen
@@ -93,43 +93,43 @@ lawa_pali(cmd)             → shell command → sitelen
 ma_ijo(name)           → env var → sitelen or weka
 toki_ijo()               → CLI args → [sitelen]
 lape(ms)           → sleep
-type(value)                 → type name → sitelen
+nasin(value)                → type name → sitelen
 ```
 
 ## MAP METHODS
 
 ```
-.keys()        → all keys → [T]
-.values()        → all values → [T]
-.suli_ijo()          → entry count → nanpa_kind
-.contains(key)        → key exists → lawa
-.remove(key)        → remove entry → removed value
+.nimi_ale()       → all keys → [T]
+.ijo_ale()        → all values → [T]
+.suli_ijo()       → entry count → nanpa_kind
+.jo(key)          → key exists → lawa
+.pakala(key)      → remove entry → removed value
 ```
 
 ## ARRAY METHODS
 
 ```
-.push(value)        → push element
-.remove(index)    → remove at index → removed value
-.suli_ijo()          → length → nanpa_kind
-.contains(value)        → contains → lawa
-.reverse()          → reversed copy → [T]
-.sort()          → sorted copy → [T]
-.join(sep)  → join to string → sitelen
+.sin_ijo(value)    → push element
+.pakala(index)    → remove at index → removed value
+.suli_ijo()       → length → nanpa_kind
+.jo(value)        → contains → lawa
+.monsi()          → reversed copy → [T]
+.nasin_ijo()      → sorted copy → [T]
+.wan(sep)         → join to string → sitelen
 ```
 
 ## STRING METHODS
 
 ```
-.suli_ijo()          → character count → nanpa_kind
-.split(sep)    → split → [sitelen]
-.contains(part)      → contains → lawa
-.replace(before, after)  → replace → sitelen
-.trim()  → trim → sitelen
-.uppercase()        → uppercase → sitelen
-.lowercase()        → lowercase → sitelen
-.starts_with(prefix)    → starts with → lawa
-.ends_with(suffix)      → ends with → lawa
+.suli_ijo()       → character count → nanpa_kind
+.tu(sep)          → split → [sitelen]
+.jo(part)         → contains → lawa
+.ante_ijo(b, a)   → replace → sitelen
+.pona_ijo()       → trim → sitelen
+.suli_sitelen()   → uppercase → sitelen
+.lili_sitelen()   → lowercase → sitelen
+.open_sitelen(p)  → starts with → lawa
+.pini_sitelen(s)  → ends with → lawa
 ```
 
 ## SYNTAX PATTERNS
@@ -177,7 +177,7 @@ kulupu name {
 
 // Impl
 ken structname {
-    pali method(self: structname) {
+    pali method(mi: structname) {
         ...
     }
 }

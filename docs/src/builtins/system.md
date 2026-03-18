@@ -41,11 +41,11 @@ lape(1000)    // sleep 1 second (1000 milliseconds)
 ## Type Introspection
 
 ```tkp
-toki(type(42))          // nanpa_kind
-toki(type("hello"))     // sitelen
-toki(type([1,2,3]))     // array
-toki(type(dictionary()))      // dictionary
-toki(type(kin))          // lawa
+toki(nasin(42))          // nanpa_kind
+toki(nasin("hello"))     // sitelen
+toki(nasin([1,2,3]))     // kulupu_kipisi
+toki(nasin(lipu()))      // lipu
+toki(nasin(kin))         // lawa
 ```
 
 ## Functions
@@ -56,5 +56,5 @@ toki(type(kin))          // lawa
 | `ma_ijo(name)` | Get env var → string or weka |
 | `toki_ijo()` | CLI args → array of strings |
 | `lape(ms)` | Sleep for N milliseconds |
-| `type(value)` | Type name → string |
+| `nasin(value)` | Type name → string |
 | `toki_pakala(value)` | Print to stderr |

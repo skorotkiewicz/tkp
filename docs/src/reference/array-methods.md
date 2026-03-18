@@ -2,10 +2,10 @@
 
 | Method | Description | Example | Result |
 |--------|-------------|---------|--------|
-| `.push(value)` | Append | `arr.push(6)` | mutates in place |
-| `.remove(index)` | Remove at index | `arr.remove(0)` | returns removed value |
-| `.suli_ijo()` | Length | `arr.suli_ijo()` | `5` |
-| `.contains(value)` | Contains | `arr.contains(3)` | `kin` |
-| `.reverse()` | Reverse | `arr.reverse()` | new reversed array |
-| `.sort()` | Sort | `arr.sort()` | new sorted array |
-| `.join(sep)` | Join to string | `arr.join(", ")` | `"1, 2, 3"` |
+| .sin_ijo(val) | Append | `arr.sin_ijo(6)` | mutates in place |
+| .pakala(idx) | Remove at index | `arr.pakala(0)` | returns removed value |
+| .suli_ijo() | Length | `arr.suli_ijo()` | `5` |
+| .jo(val) | Contains | `arr.jo(3)` | `kin` |
+| .monsi() | Reverse | `arr.monsi()` | new reversed array |
+| .nasin_ijo() | Sort | `arr.nasin_ijo()` | new sorted array |
+| .wan(sep) | Join to string | `arr.wan(", ")` | `"1, 2, 3"` |

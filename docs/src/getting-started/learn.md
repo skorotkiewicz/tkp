@@ -192,8 +192,8 @@ lukin {
 ### Impls (`ken`)
 ```tokipona
 ken Jan {
-    pali greet() {
-        toki("toki, mi jan " + self.name)
+    pali greet(mi: Jan) {
+        toki("toki, mi jan " + mi.name)
     }
 }
 me.greet()

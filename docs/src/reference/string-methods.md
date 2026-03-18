@@ -2,15 +2,15 @@
 
 | Method | Description | Example | Result |
 |--------|-------------|---------|--------|
-| `.suli_ijo()` | Character count | `"tkptext".suli_ijo()` | `2` |
-| `.split(sep)` | Split by separator | `"a,b,c".split(",")` | `["a", "b", "c"]` |
-| `.contains(s)` | Contains substring | `"hello".contains("ell")` | `kin` |
-| `.replace(from, to)` | Replace | `"hello".replace("l", "r")` | `"herro"` |
-| `.trim()` | Trim whitespace | `" hi ".trim()` | `"hi"` |
-| `.uppercase()` | Uppercase | `"hello".uppercase()` | `"HELLO"` |
-| `.lowercase()` | Lowercase | `"HELLO".lowercase()` | `"hello"` |
-| `.starts_with(s)` | Starts with | `"hello".starts_with("he")` | `kin` |
-| `.ends_with(s)` | Ends with | `"hello".ends_with("lo")` | `kin` |
+| .suli_ijo() | Character count | `"tkptext".suli_ijo()` | `2` |
+| .tu(sep) | Split by separator | `"a,b,c".tu(",")` | `["a", "b", "c"]` |
+| .jo(s) | Contains substring | `"hello".jo("ell")` | `kin` |
+| .ante_ijo(from, to) | Replace | `"hello".ante_ijo("l", "r")` | `"herro"` |
+| .pona_ijo() | Trim whitespace | `" hi ".pona_ijo()` | `"hi"` |
+| .suli_sitelen() | Uppercase | `"hello".suli_sitelen()` | `"HELLO"` |
+| .lili_sitelen() | Lowercase | `"HELLO".lili_sitelen()` | `"hello"` |
+| .open_sitelen(s) | Starts with | `"hello".open_sitelen("he")` | `kin` |
+| .pini_sitelen(s) | Ends with | `"hello".pini_sitelen("lo")` | `kin` |
 
 ## String Indexing
 
