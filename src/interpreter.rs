@@ -18,7 +18,6 @@ pub fn capture_flush() -> String {
     OUTPUT_BUFFER.with(|b| b.borrow_mut().take().unwrap_or_default())
 }
 
-
 pub struct Interpreter {
     pub env: Environment,
 }
