@@ -3,7 +3,7 @@ hljs.registerLanguage('tkp', (hljs) => {
     keyword: 'pali pana ijo awen la ante sin lon pini tawa kulupu lukin alasa jo sama insa ken nanpa',
     literal: 'kin ala weka',
     type: 'nanpa_kind kipisi sitelen lawa weka',
-    built_in: 'toki kute lili_nanpa wawa_nanpa suli_nanpa nanpa_ante kipisi_ante suli_ijo lipu_lukin lipu_sitelen lipu_sin lipu_lon sitelen_pali toki_pakala nasin lape lawa_pali toki_ijo tenpo_ni suno_ni nanpa_tenpo nasin_alasa nasin_sama nasin_ante lipu_lukin_http tawa_pana kulupu_lukin kulupu_pali kulupu_pona'
+    built_in: 'toki kute lili_nanpa wawa_nanpa suli_nanpa nanpa_ante kipisi_ante suli_ijo lipu_lukin lipu_sitelen lipu_sin lipu_lon sitelen_pali toki_pakala nasin lape lawa_pali toki_ijo tenpo_ni suno_ni nanpa_tenpo nasin_alasa nasin_sama nasin_ante tawa_kama tawa_pana kulupu_lukin kulupu_pali kulupu_pona'
   };
 
   return {

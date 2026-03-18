@@ -8,3 +8,5 @@
 *.vsix
 
 /docs/book
+/tools
+/tests/examples

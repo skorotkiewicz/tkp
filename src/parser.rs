@@ -43,15 +43,23 @@ impl Parser {
     }
 
     fn peek(&self) -> &Token {
+        let mut p = self.pos;
+        while p < self.tokens.len() && matches!(self.tokens[p].token, Token::Newline) {
+            p += 1;
+        }
         self.tokens
-            .get(self.pos)
+            .get(p)
             .map(|t| &t.token)
             .unwrap_or(&Token::Eof)
     }
 
     fn peek_pos(&self) -> (usize, usize) {
+        let mut p = self.pos;
+        while p < self.tokens.len() && matches!(self.tokens[p].token, Token::Newline) {
+            p += 1;
+        }
         self.tokens
-            .get(self.pos)
+            .get(p)
             .map(|t| (t.line, t.col))
             .unwrap_or((0, 0))
     }
@@ -218,6 +226,14 @@ impl Parser {
                 ));
             }
         };
+
+        if matches!(self.peek(), Token::Lt) {
+            self.advance();
+            while !matches!(self.peek(), Token::Gt | Token::Eof) {
+                self.advance();
+            }
+            self.expect(&Token::Gt)?;
+        }
 
         self.expect(&Token::LParen)?;
         let mut params = Vec::new();
