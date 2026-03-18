@@ -47,10 +47,7 @@ impl Parser {
         while p < self.tokens.len() && matches!(self.tokens[p].token, Token::Newline) {
             p += 1;
         }
-        self.tokens
-            .get(p)
-            .map(|t| &t.token)
-            .unwrap_or(&Token::Eof)
+        self.tokens.get(p).map(|t| &t.token).unwrap_or(&Token::Eof)
     }
 
     fn peek_pos(&self) -> (usize, usize) {
